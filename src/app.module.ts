@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entities/user.entity';
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
+import { studentModule } from './student/student.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { UserModule } from './user/user.module';
     TypeOrmModule.forFeature([User]),
     AuthModule,
     AdminModule,
-    UserModule
+    UserModule,
+    studentModule
   ],
   controllers: [AppController],
   providers: [AppService],
