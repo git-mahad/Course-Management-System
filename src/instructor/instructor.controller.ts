@@ -1,4 +1,12 @@
-import { Controller, Post, Get, Body, Param, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Param,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { InstructorService } from './instructor.service';
 import { CourseEntity } from '../course/entities/course.entity';
 import { CreateCourseDto } from './dto/Instructor-create-course.dto';
@@ -7,7 +15,7 @@ const dummyInstructorId = 2;
 
 @Controller('instructor')
 export class InstructorController {
-  constructor(private readonly instructorService: InstructorService) { }
+  constructor(private readonly instructorService: InstructorService) {}
 
   @Get('courses')
   getMyCourses(): Promise<CourseEntity[]> {
@@ -19,11 +27,10 @@ export class InstructorController {
     return this.instructorService.createCourse(dummyInstructorId, dto);
   }
 
-
   @Patch('courses/:id')
   updateCourse(
     @Param('id') id: number,
-    @Body() dto: Partial<CourseEntity>
+    @Body() dto: Partial<CourseEntity>,
   ): Promise<CourseEntity> {
     return this.instructorService.updateCourse(dummyInstructorId, id, dto);
   }
@@ -35,6 +42,6 @@ export class InstructorController {
 
   @Get('enrollment-stats')
   getEnrollmentStats() {
-    return this.instructorService.getEnrollmentStats(dummyInstructorId)
+    return this.instructorService.getEnrollmentStats(dummyInstructorId);
   }
 }

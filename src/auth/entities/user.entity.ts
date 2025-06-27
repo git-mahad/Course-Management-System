@@ -1,6 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { CourseEntity } from 'src/course/entities/course.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -26,10 +25,10 @@ export class User {
   @Column({
     type: 'enum',
     enum: UserRole,
-    default: UserRole.STUDENT
+    default: UserRole.STUDENT,
   })
-  role: UserRole
-  
+  role: UserRole;
+
   @Column({ default: true })
   isActive: boolean;
 }

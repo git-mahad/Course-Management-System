@@ -16,8 +16,13 @@ export class ProgressService {
     private contentRepo: Repository<CourseContent>,
   ) {}
 
-  async updateProgress(student: User, dto: UpdateProgressDto): Promise<Progress> {
-    const content = await this.contentRepo.findOne({ where: { id: dto.contentId } });
+  async updateProgress(
+    student: User,
+    dto: UpdateProgressDto,
+  ): Promise<Progress> {
+    const content = await this.contentRepo.findOne({
+      where: { id: dto.contentId },
+    });
     if (!content) throw new Error('Content not found');
 
     let progress = await this.progressRepo.findOne({
@@ -40,6 +45,9 @@ export class ProgressService {
   }
 
   async getProgressForStudent(studentId: number): Promise<Progress[]> {
-    return this.progressRepo.find({ where: { student: { id: studentId } }, relations: ['content'] });
+    return this.progressRepo.find({
+      where: { student: { id: studentId } },
+      relations: ['content'],
+    });
   }
 }

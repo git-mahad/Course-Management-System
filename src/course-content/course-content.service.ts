@@ -16,7 +16,9 @@ export class CourseContentService {
   ) {}
 
   async create(dto: CreateCourseContentDto) {
-    const course = await this.courseRepo.findOne({ where: { id: dto.courseId } });
+    const course = await this.courseRepo.findOne({
+      where: { id: dto.courseId },
+    });
     if (!course) throw new NotFoundException('Course not found');
 
     const content = this.contentRepo.create({ ...dto, course });

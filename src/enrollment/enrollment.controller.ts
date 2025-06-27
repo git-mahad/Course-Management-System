@@ -1,9 +1,16 @@
-import { Controller, Post, Body, Get, Param, Patch, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Patch, Query } from '@nestjs/common';
 import { EnrollmentService } from './enrollment.service';
 import { EnrollCourseDto } from './dto/enroll-course.dto';
 import { User, UserRole } from 'src/auth/entities/user.entity';
 
-export const dummyStudent: User = { id: 1, email: '', name: '', password: '', role: UserRole.STUDENT, isActive: true };
+export const dummyStudent: User = {
+  id: 1,
+  email: '',
+  name: '',
+  password: '',
+  role: UserRole.STUDENT,
+  isActive: true,
+};
 
 @Controller('enrollments')
 export class EnrollmentController {
@@ -25,7 +32,14 @@ export class EnrollmentController {
   }
 
   @Patch('progress')
-  updateProgress(@Query('courseId') courseId: number, @Query('value') value: number) {
-    return this.enrollmentService.updateProgress(dummyStudent.id, courseId, value);
+  updateProgress(
+    @Query('courseId') courseId: number,
+    @Query('value') value: number,
+  ) {
+    return this.enrollmentService.updateProgress(
+      dummyStudent.id,
+      courseId,
+      value,
+    );
   }
 }

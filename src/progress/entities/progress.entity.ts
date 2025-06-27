@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Unique } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Column,
+  Unique,
+} from 'typeorm';
 import { User } from 'src/auth/entities/user.entity';
 import { CourseContent } from 'src/course-content/entities/course-content.entity';
 

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EnrollmentEntity } from './Entity/enrollment.entity';
@@ -16,13 +20,17 @@ export class EnrollmentService {
   ) {}
 
   async enroll(student: User, courseId: number): Promise<EnrollmentEntity> {
-    const course = await this.courseRepo.findOne({ where: { id: courseId, status: 'approved' } });
-    if (!course) throw new NotFoundException('Course not found or not approved');
+    const course = await this.courseRepo.findOne({
+      where: { id: courseId, status: 'approved' },
+    });
+    if (!course)
+      throw new NotFoundException('Course not found or not approved');
 
     const alreadyEnrolled = await this.enrollmentRepo.findOne({
       where: { student: { id: student.id }, course: { id: courseId } },
     });
-    if (alreadyEnrolled) throw new ConflictException('Already enrolled in this course');
+    if (alreadyEnrolled)
+      throw new ConflictException('Already enrolled in this course');
 
     const enrollment = this.enrollmentRepo.create({ student, course });
     return this.enrollmentRepo.save(enrollment);
@@ -34,7 +42,10 @@ export class EnrollmentService {
     });
   }
 
-  async getEnrollment(studentId: number, courseId: number): Promise<EnrollmentEntity> {
+  async getEnrollment(
+    studentId: number,
+    courseId: number,
+  ): Promise<EnrollmentEntity> {
     const enrollment = await this.enrollmentRepo.findOne({
       where: { student: { id: studentId }, course: { id: courseId } },
     });
@@ -43,7 +54,11 @@ export class EnrollmentService {
     return enrollment;
   }
 
-  async updateProgress(studentId: number, courseId: number, progress: number): Promise<EnrollmentEntity> {
+  async updateProgress(
+    studentId: number,
+    courseId: number,
+    progress: number,
+  ): Promise<EnrollmentEntity> {
     const enrollment = await this.getEnrollment(studentId, courseId);
     enrollment.progress = progress;
     return this.enrollmentRepo.save(enrollment);

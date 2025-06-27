@@ -18,7 +18,7 @@ import { CourseContent } from 'src/course-content/entities/course-content.entity
 @Controller('student')
 @UseGuards(JwtAuthGuard)
 export class StudentController {
-  constructor(private readonly studentService: StudentService) { }
+  constructor(private readonly studentService: StudentService) {}
 
   @Get('profile')
   async getMyProfile(@Request() req) {
@@ -32,12 +32,14 @@ export class StudentController {
 
   @Get('courses')
   async browseApprovedCourses(): Promise<CourseEntity[]> {
-    return this.studentService.browseApprovedCourses()
+    return this.studentService.browseApprovedCourses();
   }
 
   @Post('courses/:courseId/enroll')
-  async enrollInCourse(@Param('courseId') courseId: number): Promise<EnrollmentEntity> {
-    return this.studentService.enrollInCourse(dummyStudent.id, courseId)
+  async enrollInCourse(
+    @Param('courseId') courseId: number,
+  ): Promise<EnrollmentEntity> {
+    return this.studentService.enrollInCourse(dummyStudent.id, courseId);
   }
 
   @Get('courses/:courseId/content')
@@ -48,9 +50,7 @@ export class StudentController {
   }
 
   @Post('content/:lessonId/complete')
-  async markLessonComplete(
-    @Param('lessonId') lessonId: number,
-  ): Promise<any> {
+  async markLessonComplete(@Param('lessonId') lessonId: number): Promise<any> {
     return this.studentService.markLessonComplete(dummyStudent.id, lessonId);
   }
 }

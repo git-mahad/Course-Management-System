@@ -1,4 +1,3 @@
-
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -25,15 +24,25 @@ export class InstructorService {
     });
   }
 
-  async createCourse(instructorId: number, dto: Partial<CourseEntity>): Promise<CourseEntity> {
-    const instructor = await this.userRepository.findOne({ where: { id: instructorId, role: UserRole.INSTRUCTOR } });
-    if (!instructor) throw new ForbiddenException('Only instructors can create courses');
+  async createCourse(
+    instructorId: number,
+    dto: Partial<CourseEntity>,
+  ): Promise<CourseEntity> {
+    const instructor = await this.userRepository.findOne({
+      where: { id: instructorId, role: UserRole.INSTRUCTOR },
+    });
+    if (!instructor)
+      throw new ForbiddenException('Only instructors can create courses');
 
     const course = this.courseRepository.create({ ...dto, instructor });
     return this.courseRepository.save(course);
   }
 
-  async updateCourse(instructorId: number, courseId: number, dto: Partial<CourseEntity>): Promise<CourseEntity> {
+  async updateCourse(
+    instructorId: number,
+    courseId: number,
+    dto: Partial<CourseEntity>,
+  ): Promise<CourseEntity> {
     const course = await this.courseRepository.findOne({
       where: { id: courseId },
       relations: ['instructor'],
@@ -57,13 +66,12 @@ export class InstructorService {
     await this.courseRepository.remove(course);
   }
 
-
   async getEnrollmentStats(instructorId: number) {
     const courses = await this.courseRepository.find({
       where: { instructor: { id: instructorId } },
       relations: ['instructor'],
     });
-  
+
     const stats: {
       courseId: number;
       courseTitle: string;
@@ -71,32 +79,31 @@ export class InstructorService {
       pendingStudents: number;
       // totalStudents: number;
     }[] = [];
-  
+
     for (const course of courses) {
       const approved = await this.enrollmentRepository.count({
         where: {
           course: { id: course.id },
-          student: { isActive: true }
-        }
+          student: { isActive: true },
+        },
       });
-  
+
       const pending = await this.enrollmentRepository.count({
         where: {
           course: { id: course.id },
-          student: { isActive: false }
-        }
+          student: { isActive: false },
+        },
       });
-  
+
       stats.push({
         courseId: course.id,
         courseTitle: course.title,
         approvedStudents: approved,
-        pendingStudents: pending
+        pendingStudents: pending,
         // totalStudents: approved + pending,
       });
     }
-  
+
     return stats;
   }
-  
 }

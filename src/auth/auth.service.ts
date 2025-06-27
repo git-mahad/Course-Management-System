@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -15,9 +20,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<{ user: Partial<User>; token: string }> {
+  async register(
+    registerDto: RegisterDto,
+  ): Promise<{ user: Partial<User>; token: string }> {
     const { email, password, name, role } = registerDto;
-    const existingUser = await this.userRepository.findOne({ where: { email } });
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
     }
@@ -27,7 +36,7 @@ export class AuthService {
       email,
       name,
       password: hashedPassword,
-      role: role || UserRole.STUDENT
+      role: role || UserRole.STUDENT,
     });
 
     const savedUser = await this.userRepository.save(user);
@@ -40,7 +49,9 @@ export class AuthService {
     };
   }
 
-  async login(loginDto: LoginDto): Promise<{ user: Partial<User>; token: string }> {
+  async login(
+    loginDto: LoginDto,
+  ): Promise<{ user: Partial<User>; token: string }> {
     const { email, password } = loginDto;
 
     const user = await this.userRepository.findOne({ where: { email } });
@@ -86,13 +97,16 @@ export class AuthService {
 
   async getAllUsers(): Promise<Partial<User>[]> {
     const users = await this.userRepository.find();
-      return users;
+    return users;
   }
 
-  async updateUserStatus(id: number, isActive: boolean): Promise<Partial<User>> {
+  async updateUserStatus(
+    id: number,
+    isActive: boolean,
+  ): Promise<Partial<User>> {
     const user = await this.findById(id);
     const updatedUser = await this.userRepository.save(user);
-    
+
     const { password, ...userWithoutPassword } = updatedUser;
     return userWithoutPassword;
   }

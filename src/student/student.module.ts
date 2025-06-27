@@ -17,7 +17,7 @@ import { Progress } from 'src/progress/entities/progress.entity';
       EnrollmentEntity,
       CourseContent,
       Progress,
-    ])
+    ]),
   ],
   controllers: [StudentController],
   providers: [StudentService],

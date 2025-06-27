@@ -13,7 +13,10 @@ export class CourseService {
     private readonly courseRepo: Repository<CourseEntity>,
   ) {}
 
-  async createCourse(dto: CreateCourseDto, instructor: User): Promise<CourseEntity> {
+  async createCourse(
+    dto: CreateCourseDto,
+    instructor: User,
+  ): Promise<CourseEntity> {
     const course = this.courseRepo.create({ ...dto, instructor });
     return this.courseRepo.save(course);
   }

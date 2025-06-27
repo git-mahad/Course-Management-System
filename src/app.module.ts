@@ -30,7 +30,13 @@ import { InstructorModule } from './instructor/instructor.module';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
-        entities: [User,CourseEntity, CourseContent, EnrollmentEntity, Progress],
+        entities: [
+          User,
+          CourseEntity,
+          CourseContent,
+          EnrollmentEntity,
+          Progress,
+        ],
         synchronize: false,
       }),
     }),
@@ -42,7 +48,7 @@ import { InstructorModule } from './instructor/instructor.module';
     CourseContentModule,
     EnrollmentModule,
     ProgressModule,
-    InstructorModule
+    InstructorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

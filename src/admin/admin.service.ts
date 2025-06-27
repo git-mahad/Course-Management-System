@@ -15,15 +15,15 @@ export class AdminService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     @InjectRepository(CourseEntity)
-    private courseRepo: Repository<CourseEntity>
+    private courseRepo: Repository<CourseEntity>,
   ) {}
 
-  async createStudent(dto: RegisterDto): Promise<User>{
+  async createStudent(dto: RegisterDto): Promise<User> {
     const student = this.userRepository.create({
       ...dto,
       role: UserRole.STUDENT,
-    })
-    return this.userRepository.save(student)
+    });
+    return this.userRepository.save(student);
   }
 
   async getAllUsers(): Promise<Partial<User>[]> {
@@ -74,7 +74,9 @@ export class AdminService {
   }
 
   async createInstructor(data: Partial<User>): Promise<User> {
-    const exists = await this.userRepository.findOne({ where: { email: data.email } });
+    const exists = await this.userRepository.findOne({
+      where: { email: data.email },
+    });
     if (exists) throw new ConflictException('Email already registered');
 
     const instructor = this.userRepository.create({
@@ -89,13 +91,19 @@ export class AdminService {
     return this.userRepository.find({ where: { role: UserRole.INSTRUCTOR } });
   }
 
-  async updateCourseStatus(courseId:number, status: "approved" | "rejected" ): Promise<CourseEntity>{
-    const course = await this.courseRepo.findOne({where: {id: courseId}, relations: ['instructor']})
+  async updateCourseStatus(
+    courseId: number,
+    status: 'approved' | 'rejected',
+  ): Promise<CourseEntity> {
+    const course = await this.courseRepo.findOne({
+      where: { id: courseId },
+      relations: ['instructor'],
+    });
 
-    if(!course) throw new NotFoundException('Course not found');
-    course.status = status
-    
-    return this.courseRepo.save(course)
+    if (!course) throw new NotFoundException('Course not found');
+    course.status = status;
+
+    return this.courseRepo.save(course);
   }
 
   async getAllCourseWithInstructor() {
@@ -104,32 +112,31 @@ export class AdminService {
     });
 
     type CourseInfo = {
-      title: string,
-      createdBy: string,
-      status: "approved" | "pending" | "rejected"
-    }
-  
+      title: string;
+      createdBy: string;
+      status: 'approved' | 'pending' | 'rejected';
+    };
+
     const approved: CourseInfo[] = [];
     const pending: CourseInfo[] = [];
-  
+
     for (const course of courses) {
       const courseInfo: CourseInfo = {
         title: course.title,
         createdBy: course.instructor?.name || 'Unknown',
         status: course.status,
       };
-  
+
       if (course.status === 'approved') {
         approved.push(courseInfo);
       } else if (course.status === 'pending') {
         pending.push(courseInfo);
       }
     }
-  
+
     return {
       approvedCourses: approved,
       pendingCourses: pending,
     };
   }
-  
 }

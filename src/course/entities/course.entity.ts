@@ -1,22 +1,20 @@
-import { User } from "src/auth/entities/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from 'src/auth/entities/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('course')
-export class CourseEntity{
-
+export class CourseEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  title: string
+  title: string;
 
   @Column()
-  description: string
+  description: string;
 
-  @Column({default: 'pending'})
-  status: 'pending' | 'approved' | 'rejected'
+  @Column({ default: 'pending' })
+  status: 'pending' | 'approved' | 'rejected';
 
-  @ManyToOne(()=> User)
+  @ManyToOne(() => User)
   instructor: User;
-
 }

@@ -22,8 +22,8 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post('student')
-  createStudent(@Body() dot: RegisterDto){
-    return this.adminService.createStudent(dot)
+  createStudent(@Body() dot: RegisterDto) {
+    return this.adminService.createStudent(dot);
   }
 
   @Get('users')
@@ -45,11 +45,8 @@ export class AdminController {
   }
 
   @Patch('users/:id/info')
-  updateUserInfo(
-    @Param('id') id: string,
-    @Body() body: UpdateUserInfoDto,
-  ) {
-    return this.adminService.updateUserInfo(+id, body)
+  updateUserInfo(@Param('id') id: string, @Body() body: UpdateUserInfoDto) {
+    return this.adminService.updateUserInfo(+id, body);
   }
 
   @Post('create-instructor')
@@ -65,13 +62,13 @@ export class AdminController {
   @Patch('courses/:id/status')
   updateCourseStatus(
     @Param('id') id: string,
-    @Body('status') status: 'approved' | 'rejected'
+    @Body('status') status: 'approved' | 'rejected',
   ) {
     return this.adminService.updateCourseStatus(+id, status);
   }
 
   @Get('courses')
-  getAllCourseWithInstructor(){
-    return this.adminService.getAllCourseWithInstructor()
+  getAllCourseWithInstructor() {
+    return this.adminService.getAllCourseWithInstructor();
   }
 }
