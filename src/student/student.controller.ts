@@ -1,53 +1,56 @@
 import {
   Controller,
   Get,
-  Param,
-  Post,
   Patch,
   Body,
   UseGuards,
-  Req,
+  Request,
+  Post,
+  Param,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { UserRole } from '../auth/entities/user.entity';
-import { UpdateProgressDto } from './dto/progress.dto';
-import { AuthenticatedRequest } from 'src/auth/interfaces/express-request.interface'; 
+import { CourseEntity } from 'src/course/entities/course.entity';
+import { EnrollmentEntity } from 'src/enrollment/Entity/enrollment.entity';
+import { dummyStudent } from 'src/enrollment/enrollment.controller';
+import { CourseContent } from 'src/course-content/entities/course-content.entity';
 
 @Controller('student')
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.STUDENT)
+@UseGuards(JwtAuthGuard)
 export class StudentController {
-  constructor(private readonly studentService: StudentService) {}
+  constructor(private readonly studentService: StudentService) { }
+
+  @Get('profile')
+  async getMyProfile(@Request() req) {
+    return this.studentService.getMyProfile(req.user.id);
+  }
+
+  @Patch('update')
+  async updateMyProfile(@Request() req, @Body() updateData: any) {
+    return this.studentService.updateMyProfile(req.user.id, updateData);
+  }
 
   @Get('courses')
-  getAvailableCourses() {
-    return this.studentService.getApprovedCourses();
+  async browseApprovedCourses(): Promise<CourseEntity[]> {
+    return this.studentService.browseApprovedCourses()
   }
 
-  @Post('courses/:id/enroll')
-  enrollCourse(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
-    return this.studentService.enrollCourse(+id, req.user.id);
+  @Post('courses/:courseId/enroll')
+  async enrollInCourse(@Param('courseId') courseId: number): Promise<EnrollmentEntity> {
+    return this.studentService.enrollInCourse(dummyStudent.id, courseId)
   }
 
-  @Get('enrollments')
-  getMyCourses(@Req() req: AuthenticatedRequest) {
-    return this.studentService.getEnrolledCourses(req.user.id);
+  @Get('courses/:courseId/content')
+  async getCourseContent(
+    @Param('courseId') courseId: number,
+  ): Promise<CourseContent[]> {
+    return this.studentService.getCourseContent(dummyStudent.id, courseId);
   }
 
-  @Get('courses/:id/content')
-  getCourseContent(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
-    return this.studentService.getCourseContent(+id, req.user.id);
-  }
-
-  @Patch('courses/:id/progress')
-  updateProgress(
-    @Param('id') id: string,
-    @Body() dto: UpdateProgressDto,
-    @Req() req: AuthenticatedRequest,
-  ) {
-    return this.studentService.updateProgress(+id, req.user.id, dto);
+  @Post('content/:lessonId/complete')
+  async markLessonComplete(
+    @Param('lessonId') lessonId: number,
+  ): Promise<any> {
+    return this.studentService.markLessonComplete(dummyStudent.id, lessonId);
   }
 }

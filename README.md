@@ -1,55 +1,87 @@
-# 🛡️ Role-Based Task Management System (NestJS + SQL)
+# Course Management System (NestJS)
 
-A robust backend API for managing tasks with **user authentication**, **role-based access control (RBAC)**, and **secure JWT-based login**, built using **NestJS** and **SQL** (MySQL/PostgreSQL) via **TypeORM**.
-
----
-
-## 📚 Features
-
-- 🔐 User registration & login with JWT
-- 👥 Role-based access (Admin / User)
-- ✅ Permission-based route protection
-- 📝 CRUD operations for tasks
-- 🧩 Modular architecture with NestJS best practices
-- 📦 TypeORM for database interaction
-- 🛠️ Configurable with environment variables
+A **Course Management System API** built using **NestJS**, **TypeORM**, and **MySQL** that supports **Admin**, **Instructor**, and **Student** roles. It allows user registration, course creation, approval flow, student enrollments, and progress tracking.
 
 ---
 
-## 🧾 Tech Stack
+## Features
 
-- **Backend**: NestJS, TypeORM
-- **Authentication**: JWT, Passport
-- **Database**: MySQL / PostgreSQL
+### Authentication
+- JWT-based login & registration
+- Role-based access control: `admin`, `instructor`, `student`
+
+### Admin
+- View all users
+- Activate/Deactivate users
+- View all courses (approved/pending) with instructor info
+- Approve/Reject courses submitted by instructors
+- Create new student accounts
+
+### Instructor
+- Create new courses (default status: pending)
+- View/update/delete own courses
+- Get course enrollment stats (approved, pending, total students)
+
+### Student
+- View and update profile
+- Browse approved courses
+- Enroll in approved courses
+- View enrolled courses and course contents
+- Mark course contents as completed (video/pdf)
+- Track progress
+
+---
+
+## Tech Stack
+
+- **Backend**: [NestJS](https://nestjs.com/)
+- **Database**: MySQL
+- **ORM**: TypeORM
+- **Authentication**: JWT
 - **Validation**: class-validator
 
 ---
 
-## 🚀 Getting Started
-
-### 1. Clone the Repo
+## Installation
 
 ```bash
-git clone https://github.com/your-username/task-management-rbac.git
-cd RBAC-task-management-system
-```
-### 2. Install Dependencies
-``` bash
+# 1. Clone the repo
+git clone https://github.com/git-mahad/Course-Management-System.git
+cd Course-Management-System
+
+# 2. Install dependencies
 npm install
-```
-### 3. Create .env file
-``` bash
-PORT=3000
-DB_HOST=localhost
-DB_PORT=3306
-DB_USERNAME=root
-DB_PASSWORD=yourpassword
-DB_DATABASE=task_management
-JWT_SECRET=your_jwt_secret
-```
-### 4. Start the server 
-``` bash
+
+# 3. Configure environment variables
+cp .env
+# then edit .env with your MySQL credentials
+
+# 4. Start MySQL locally or via Docker (recommended)
+
+# 5. Run the project
 npm run start:dev
+
 ```
-### 5. Feel free to Connect
-- [Mahad](https://linkedin.com/in/mahad-dev)
+## Folder Strucutre
+
+``` bash
+src/
+├── auth/
+├── admin/
+├── student/
+├── course/
+├── course-content/
+├── enrollment/
+├── instructor/
+├── progress/
+├── student/
+
+```
+<!-- ## API Endpoints -->
+
+## Stay in touch
+
+- [LinkedIn – Mahad](https://linkedin.com/in/mahad-dev)
+- Feel free to raise issues or contribute!
+
+## Contribution is appreciated

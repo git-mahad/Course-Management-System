@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { CourseEntity } from 'src/course/entities/course.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
