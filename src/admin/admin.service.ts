@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { User, UserRole } from '../auth/entities/user.entity';
 import { CourseEntity } from 'src/course/entities/course.entity';
 import { RegisterDto } from 'src/auth/dto/register.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AdminService {
@@ -18,12 +19,25 @@ export class AdminService {
     private courseRepo: Repository<CourseEntity>,
   ) {}
 
+<<<<<<< HEAD
   async createStudent(dto: RegisterDto): Promise<User> {
     const student = this.userRepository.create({
       ...dto,
       role: UserRole.STUDENT,
     });
     return this.userRepository.save(student);
+=======
+  async createStudent(dto: RegisterDto): Promise<User>{
+    const {password, ...rest} = dto;
+    
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const student = this.userRepository.create({
+      ...rest,
+      password: hashedPassword,
+      role: UserRole.STUDENT
+    })
+    return this.userRepository.save(student)
+>>>>>>> friday
   }
 
   async getAllUsers(): Promise<Partial<User>[]> {
@@ -72,15 +86,17 @@ export class AdminService {
     const { password, ...userWithoutPassword } = updatedUser;
     return userWithoutPassword;
   }
-
   async createInstructor(data: Partial<User>): Promise<User> {
     const exists = await this.userRepository.findOne({
       where: { email: data.email },
     });
     if (exists) throw new ConflictException('Email already registered');
+    
+    const hashedPassword = await bcrypt.hash(data.password, 12)
 
     const instructor = this.userRepository.create({
       ...data,
+      password:hashedPassword,
       role: UserRole.INSTRUCTOR,
       isActive: true,
     });
