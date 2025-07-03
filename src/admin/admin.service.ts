@@ -19,14 +19,6 @@ export class AdminService {
     private courseRepo: Repository<CourseEntity>,
   ) {}
 
-<<<<<<< HEAD
-  async createStudent(dto: RegisterDto): Promise<User> {
-    const student = this.userRepository.create({
-      ...dto,
-      role: UserRole.STUDENT,
-    });
-    return this.userRepository.save(student);
-=======
   async createStudent(dto: RegisterDto): Promise<User>{
     const {password, ...rest} = dto;
     
@@ -37,7 +29,6 @@ export class AdminService {
       role: UserRole.STUDENT
     })
     return this.userRepository.save(student)
->>>>>>> friday
   }
 
   async getAllUsers(): Promise<Partial<User>[]> {
